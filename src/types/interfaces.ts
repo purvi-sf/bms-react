@@ -11,11 +11,11 @@ export const GENRES = [
   "Science",
   "Biography",
   "Other",
-] as const;
+] as const; //readonly tupe of genres
 
-export type Genre = typeof GENRES[number];
+export type Genre = typeof GENRES[number]; //union type
 
-export type BookType = "Printed" | "EBook";
+export type BookType = "Printed" | "EBook"; 
 
 export interface IBook {
   id: string;
