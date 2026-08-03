@@ -40,7 +40,7 @@ describe("BookList", () => {
   it("renders correct number of books", () => {
   render(<BookList books={mockBooks} onEdit={() => {}} onDelete={() => {}} />);
   const editButtons = screen.getAllByText("Edit");
-  expect(editButtons).toHaveLength(4); // 2 books × 2 views (desktop + mobile)
+  expect(editButtons).toHaveLength(4); 
 });
 
 });

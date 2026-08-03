@@ -13,25 +13,23 @@ const calculateAge = (publishDate: string): number =>
 const getDiscount = (publishDate: string): number => {
   const age = calculateAge(publishDate);
   if (age > 100) return 30;
-  if (age > 50) return 20;
-  if (age > 25) return 10;
-  return 0;
+  else if (age > 50) return 20;
+  else if (age > 25) return 10;
+  else return 0;
 };
 
 const getEra = (publishDate: string): string => {
   const age = calculateAge(publishDate);
   if (age <= 26) return "Contemporary";
-  if (age <= 126) return "Modernism";
-  if (age <= 189) return "Victorian";
-  if (age <= 228) return "Romanticism";
-  if (age <= 426) return "Enlightenment";
-  return "Classical";
+  else if (age <= 126) return "Modernism";
+  else if (age <= 189) return "Victorian";
+  else if (age <= 228) return "Romanticism";
+  else if (age <= 426) return "Enlightenment";
+  else return "Classical";
 };
 
 const getExtraInfo = (book: IBook): string =>
-  book.type === "Printed"
-    ? `${Math.ceil((book.pageCount ?? 0) / 30)} hrs reading`
-    : `${book.fileSize ?? "0"} MB`;
+  book.type === "Printed" ? `${Math.ceil((book.pageCount ?? 0) / 30)} hrs reading` : `${book.fileSize ?? "0"} MB`;
 
 const btnClass = (color: string) =>
   `px-3 py-1 rounded text-white text-xs font-bold border-none cursor-pointer ${color}`;
