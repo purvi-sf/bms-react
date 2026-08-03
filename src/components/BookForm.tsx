@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 //useEffect : runs the code when something specific changes for ex. when the user edits a book
 
 import type { IBook, IFormValues } from "../types/interfaces"; //type is used to tell TS that they r used for typechecking and dont exist at runtime
-import { GENRES } from "../types/interfaces.ts"; //real runtime data so no type 
+import { GENRES } from "../types/interfaces"; //real runtime data so no type 
 
 //Props are basically the parent component passing the data and instructions to child component
 //BookForm is child and App is parent here 
@@ -30,6 +30,7 @@ const EMPTY_FORM: IFormValues = { //clearForm basically
   publishDate: "", genre: "", type: "", extra: "",
 };
 
+// Adding a new field only requires adding one object here, nothing else changes
 const FIELDS: FieldConfig[] = [
   { key: "title", label: "Title", type: "text", placeholder: "Book title" },
   { key: "author", label: "Author", type: "text", placeholder: "Author name" },
@@ -50,9 +51,11 @@ const FIELDS: FieldConfig[] = [
       { value: "EBook", label: "EBook" },
     ],
   },
+  // dynamic field — hidden until book type is selected, label changes based on type
   { key: "extra", label: "", type: "dynamic" },
 ];
 
+// Fields that must not be empty — validate() loops over this instead of writing one if per field
 const REQUIRED_FIELDS: FieldKey[] = ["title", "author", "isbn", "publishDate", "genre", "type", "extra"];
 
 const inputClass = (hasError: boolean) =>
@@ -62,8 +65,8 @@ const labelClass = "block text-sm font-bold text-blue-300 mb-1";
 const errorClass = "text-red-400 text-xs mt-1";
 
 export default function BookForm({ editingBook, isbnExists, onSubmit, onCancel }: BookFormProps) {
-  const [values, setValues] = useState<IFormValues>(EMPTY_FORM);
-  const [errors, setErrors] = useState<Partial<Record<FieldKey, string>>>({});
+  const [values, setValues] = useState<IFormValues>(EMPTY_FORM); // values: what the user has typed in every field right now
+  const [errors, setErrors] = useState<Partial<Record<FieldKey, string>>>({}); // errors: validation messages, empty object means no errors
 
   useEffect(() => {
     setValues(editingBook ? {
@@ -80,7 +83,7 @@ export default function BookForm({ editingBook, isbnExists, onSubmit, onCancel }
     setErrors({});
   }, [editingBook]);
 
-  const validate = (): boolean => {
+  const validate = (): boolean => {  // Checks all required fields in one loop & returns true if form is valid
     const newErrors: Partial<Record<FieldKey, string>> = {};
     REQUIRED_FIELDS.forEach(field => {
       if (!values[field]?.toString().trim()) {
@@ -94,6 +97,7 @@ export default function BookForm({ editingBook, isbnExists, onSubmit, onCancel }
     return Object.keys(newErrors).length === 0;
   };
 
+  // Single handler for all inputs and selects which uses element name attribute to update correct field
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setValues(prev => ({
